@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\ListnameController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return view('welcome');
-});
+}); */
 
-Route::resource('/items', ItemsController::class)->names('items');
+Route::resource('/', ItemsController::class)->names('items');
+
+Route::resource('/history', ListnameController::class)->names('history');

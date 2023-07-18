@@ -139,10 +139,12 @@
                     </div>
                 </div>
                 <div class="pt-8">
-                    <form>
+                    <form id="formList" action="{{route('history.store')}}" method="POST">
+                        @csrf
                         <div class="flex">
                             <div class="relative w-full">
-                                <input type="text"
+                                
+                                <input type="text" name="nombre" id="nombreLista"
                                     class="block p-2.5 w-full h-16 z-20 text-sm  rounded-lg border-amber-500 border-2"
                                     placeholder="Enter a name" required>
                                 <button type="submit"
@@ -150,6 +152,7 @@
                                     Save
                                 </button>
                             </div>
+                            <input type="hidden" name="arreglo" id="arregloInput">
                         </div>
                     </form>
                 </div>
@@ -157,14 +160,16 @@
         </aside>
         <script>
             datos2 = @json($items);
+            
             let contenedor = document.getElementById("contenido1");
             let contenedor1 = document.getElementById("contenido2");
             let contenedor2 = document.getElementById("contenido3");
             for (var i = 0; i < datos2.length; i++) {
                 let div = document.createElement('div');
                 let dato = datos2[i].name;
+                let id = datos2[i].id;
                 div.className = "bg-white items-center drop-shadow-md rounded-lg py-2 px-4 flex flex-row justify-between";
-                div.innerHTML =`${dato}<button class="agregarFruta" data-valor="${dato}"><i class="fa-solid fa-plus"></i></button></div>`;
+                div.innerHTML =`${dato}<button id="${id}" class="agregarFruta" data-valor="${dato}"><i class="fa-solid fa-plus"></i></button></div>`;
                 if (datos2[i].category_id == 1) {
                     contenedor.appendChild(div)
                 } else if (datos2[i].category_id == 2) {
@@ -185,6 +190,8 @@
                 let boton = [...element.children]
                 boton[0].addEventListener("click", function() {
                     let valor = boton[0].dataset.valor;
+                    let valorid=boton[0].id
+                    console.log(valorid)
                     // Agregar el valor al arreglo verificando si existe y sumando en cantidad si ya esta
                     const frutaExistente = lista.find(list => list.nombre == valor)
                     if (frutaExistente) {
@@ -192,7 +199,8 @@
                     } else {
                         lista.push({
                             nombre: valor,
-                            cantidad: 1
+                            cantidad: 1,
+                            idProducto : valorid
                         });
                         carrito.innerHTML = lista.length;
                     }
@@ -230,56 +238,57 @@
                 });
             });
             arregloContenedor1.forEach(element => {
-            let boton = [...element.children]
-            boton[0].addEventListener("click", function() {
-                let valor = boton[0].dataset.valor;
-                // Agregar el valor al arreglo verificando si existe y sumando en cantidad si ya esta
-                const frutaExistente = lista.find(list => list.nombre == valor)
-                if (frutaExistente) {
-                    frutaExistente.cantidad += 1
-                } else {
-                    lista.push({
+                let boton = [...element.children]
+                boton[0].addEventListener("click", function() {
+                    let valor = boton[0].dataset.valor;
+                    let valorid=boton[0].id
+                    console.log(valorid)
+                    // Agregar el valor al arreglo verificando si existe y sumando en cantidad si ya esta
+                    const frutaExistente = lista.find(list => list.nombre == valor)
+                    if (frutaExistente) {
+                        frutaExistente.cantidad += 1
+                    } else {
+                        lista.push({
                         nombre: valor,
-                        cantidad: 1
-                    });
-                    carrito.innerHTML = lista.length;
-                }
-                //imprimir valores en lista
-                contenedorLista.innerHTML = "";
-                lista.forEach(list => {
-                    let div = document.createElement('div');
-                    div.className = "flex w-72 h-8 mx-auto mb-5 justify-between";
-                    div.innerHTML = `<p class=" text-lg">${list.nombre}</p>
-                    <div class="relative">
-                    <button class="border-2 h-8 flex justify-center items-center  rounded-full border-amber-500  text-amber-500 font-bold py-2 px-4 rounded">
-                    <p class="">${list.cantidad} pcs</p>
-                    </button>
-                    <div class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden">
-                    <ul class="py-2">
-                    <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 1</a></li>
-                    <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 2</a></li>
-                    <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 3</a></li>
-                    </ul>
-                    </div>
-                    </div>`
-                    contenedorLista.appendChild(div)
-                    const button = document.querySelector('.relative button');
-                    const menu = document.querySelector('.relative .absolute');
-
-                    button.addEventListener('click', function() {
-                        menu.classList.toggle('hidden');
-
-
-                        // Generar una lista HTML y mostrarla dentro del div ShoppingList
-
-
+                        cantidad: 1,
+                        idProducto : valorid
+                        });
+                        carrito.innerHTML = lista.length;
+                    }
+                    //imprimir valores en lista
+                    contenedorLista.innerHTML = "";
+                    lista.forEach(list => {
+                        let div = document.createElement('div');
+                        div.className = "flex w-72 h-8 mx-auto mb-5 justify-between";
+                        div.innerHTML = `<p class=" text-lg">${list.nombre}</p>
+                        <div class="relative">
+                        <button class="border-2 h-8 flex justify-center items-center  rounded-full border-amber-500  text-amber-500 font-bold py-2 px-4 rounded">
+                        <p class="">${list.cantidad} pcs</p>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden">
+                        <ul class="py-2">
+                        <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 1</a></li>
+                        <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 2</a></li>
+                        <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 3</a></li>
+                        </ul>
+                        </div>
+                        </div>`
+                        contenedorLista.appendChild(div)
+                        const button = document.querySelector('.relative button');
+                        const menu = document.querySelector('.relative .absolute');
+                        button.addEventListener('click', function() {
+                            menu.classList.toggle('hidden');
+                            // Generar una lista HTML y mostrarla dentro del div ShoppingList
+                        });
                     });
                 });
-            });
+            });   
             arregloContenedor2.forEach(element => {
                 let boton = [...element.children]
                 boton[0].addEventListener("click", function() {
                     let valor = boton[0].dataset.valor;
+                    let valorid=boton[0].id
+                    console.log(valorid)
                     // Agregar el valor al arreglo verificando si existe y sumando en cantidad si ya esta
                     const frutaExistente = lista.find(list => list.nombre == valor)
                     if (frutaExistente) {
@@ -287,41 +296,37 @@
                     } else {
                         lista.push({
                             nombre: valor,
-                            cantidad: 1
+                            cantidad: 1,
+                            idProducto : valorid
                         });
                         carrito.innerHTML = lista.length;
                     }
                     //imprimir valores en lista
                     contenedorLista.innerHTML = "";
                     lista.forEach(list => {
-                    let div = document.createElement('div');
-                    div.className = "flex w-72 h-8 mx-auto mb-5 justify-between";
-                    div.innerHTML = `<p class=" text-lg">${list.nombre}</p>
-                    <div class="relative">
-                    <button class="border-2 h-8 flex justify-center items-center  rounded-full border-amber-500  text-amber-500 font-bold py-2 px-4 rounded">
-                    <p class="">${list.cantidad} pcs</p>
-                    </button>
-                    <div class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden">
-                    <ul class="py-2">
-                    <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 1</a></li>
-                    <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 2</a></li>
-                    <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 3</a></li>
-                    </ul>
-                    </div>
-                    </div>`
-                    contenedorLista.appendChild(div)
-                    const button = document.querySelector('.relative button');
-                    const menu = document.querySelector('.relative .absolute');
-
-                    button.addEventListener('click', function() {
-                        menu.classList.toggle('hidden');
-
-
-                        // Generar una lista HTML y mostrarla dentro del div ShoppingList
-
-
+                        let div = document.createElement('div');
+                        div.className = "flex w-72 h-8 mx-auto mb-5 justify-between";
+                        div.innerHTML = `<p class=" text-lg">${list.nombre}</p>
+                        <div class="relative">
+                        <button class="border-2 h-8 flex justify-center items-center  rounded-full border-amber-500  text-amber-500 font-bold py-2 px-4 rounded">
+                        <p class="">${list.cantidad} pcs</p>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg hidden">
+                        <ul class="py-2">
+                        <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 1</a></li>
+                        <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 2</a></li>
+                        <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Opción 3</a></li>
+                        </ul>
+                        </div>
+                        </div>`
+                        contenedorLista.appendChild(div)
+                        const button = document.querySelector('.relative button');
+                        const menu = document.querySelector('.relative .absolute');
+                        button.addEventListener('click', function() {
+                            menu.classList.toggle('hidden');
+                            // Generar una lista HTML y mostrarla dentro del div ShoppingList
+                        });
                     });
-                });
                 });
             });
 
@@ -338,9 +343,15 @@
                 document.getElementById('myModal').classList.add('hidden');
             });
 
-            // JavaScript para abrir y cerrar el menú desplegable
+        
 
-        });
+        
+        //javascript para mandar el arreglo al form
+        document.querySelector('#formList').addEventListener('click', function() {
+        // Tu arreglo de JavaScript
+        document.getElementById('arregloInput').value = JSON.stringify(lista);
+        document.getElementById('nombreLista').value
+    });
         </script>
     </body>
 </html>
