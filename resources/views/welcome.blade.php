@@ -23,19 +23,19 @@
                 </div>
                 <ul class="flex flex-col items-center gap-10 font-normal">
                     <li class="flex items-center p-3 text-black rounded-lg hover:bg-slate-50 group">
-                        <a href="#">
+                        <button id="vistaPrincipal" href="#">
                             <i class="fa-solid fa-list-ul fa-xl"></i>
-                        </a>
+                        </button>
                     </li>
                     <li class="flex items-center p-3 text-black rounded-lg hover:bg-slate-50 group">
-                        <a href="#">
+                        <button id="vistaListas" href="#">
                             <i class="fa-solid fa-clock-rotate-left fa-xl"></i>
-                        </a>
+                        </button>
                     </li>
                     <li class="flex items-center p-3 text-black rounded-lg hover:bg-slate-50 group">
-                        <a href="#">
+                        <button id="vistaGraficas" href="#">
                             <i class="fa-solid fa-chart-line fa-xl"></i>
-                        </a>
+                        </button>
                     </li>
                 </ul>
                 <div class="flex place-self-center static">
@@ -47,79 +47,149 @@
             </div>
         </aside>
         <div class="p-20 ml-24 bg-slate-50 mr-96  pt-9">
-            {{-- @include('components.history',['clase'=>'']) --}}
-            <div class="flex flex-row justify-between mb-10">
-                <h1 class="text-2xl"><span class=" text-amber-500 font-bold">Shoppingify</span> allows you take your
-                shopping list wherever you go</h1>
-                <form>
-                    <label for="default-search"
-                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                            </svg>
+            <div id="principal" class="">
+                <div class="flex flex-row justify-between mb-10">
+                    <h1 class="text-2xl"><span class=" text-amber-500 font-bold">Shoppingify</span> allows you take your
+                    shopping list wherever you go</h1>
+                    <form>
+                        <label for="default-search"
+                            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                            </div>
+                            <input type="search" id="default-search"
+                            class="block w-48 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500    "
+                            placeholder="Search" required>
                         </div>
-                        <input type="search" id="default-search"
-                        class="block w-48 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500    "
-                        placeholder="Search" required>
-                    </div>
-                </form>
-            </div>
-            @foreach ($categories as $category)
-                <div class="mb-10 mt-10 ">
-                    <h3 class="mb-5 text-xl">{{ $category->name }}</h3>
-                    <div id="contenido{{ $category->id }}" class="grid grid-cols-4 gap-10">
-                    </div>
-                </div>
-            @endforeach
-            <!-- Modal -->
-            <div id="myModal" class="fixed inset-0 flex items-center justify-end z-50 hidden">
-                <div class="bg-white w-96 h-screen overflow-y-auto p-6">
-                    <h2 class="text-xl font-bold mb-4">Add a new item</h2>
-                    <form action="{{ route('items.store') }}" method="POST">
-                        @csrf
-                        <div class="mb-6">
-                            <label for="default-input" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <input name="name" type="text" id="default-input"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
-                        </div>
-                        <div class="mb-6">
-                            <label for="default-input"
-                            class="block mb-2 text-sm font-medium text-gray-900">Note(opcional)</label>
-                            <input type="text" id="default-inpu" name="note"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
-                        </div>
-                        <div class="mb-6">
-                            <label for="default-input"
-                            class="block mb-2 text-sm font-medium text-gray-900">image(opcional)</label>
-                            <input type="text" id="default-image" name="image"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
-                        </div>
-                        <div class="mb-6">
-                            <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Selecciona una
-                            categoria</label>
-                            <select id="categories" name="category"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <button id="closeModal"
-                            class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                            Cancel
-                        </button>
-                        <button type="submit" id="closeModal1"
-                            class="mt-4 bg-sky-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                            Save
-                        </button>
                     </form>
                 </div>
+                @foreach ($categories as $category)
+                    <div class="mb-10 mt-10 ">
+                        <h3 class="mb-5 text-xl">{{ $category->name }}</h3>
+                        <div id="contenido{{ $category->id }}" class="grid grid-cols-4 gap-10">
+                        </div>
+                    </div>
+                @endforeach
+                <!-- Modal -->
+                <div id="myModal" class="fixed inset-0 flex items-center justify-end z-50 hidden">
+                    <div class="bg-white w-96 h-screen overflow-y-auto p-6">
+                        <h2 class="text-xl font-bold mb-4">Add a new item</h2>
+                        <form action="{{ route('items.store') }}" method="POST">
+                            @csrf
+                            <div class="mb-6">
+                                <label for="default-input" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+                                <input name="name" type="text" id="default-input"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
+                            </div>
+                            <div class="mb-6">
+                                <label for="default-input"
+                                class="block mb-2 text-sm font-medium text-gray-900">Note(opcional)</label>
+                                <input type="text" id="default-inpu" name="note"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
+                            </div>
+                            <div class="mb-6">
+                                <label for="default-input"
+                                class="block mb-2 text-sm font-medium text-gray-900">image(opcional)</label>
+                                <input type="text" id="default-image" name="image"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
+                            </div>
+                            <div class="mb-6">
+                                <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Selecciona una
+                                categoria</label>
+                                <select id="categories" name="category"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button id="closeModal"
+                                class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                Cancel
+                            </button>
+                            <button type="submit" id="closeModal1"
+                                class="mt-4 bg-sky-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                Save
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
+            <div id="listas" class="hidden">
+                <h1>Shopping History</h1>
+                <div>
+                    <p class="mb-4">July</p>
+                    <div class="grid grid-cols-1 gap-4">
+                        @foreach ($listnames as $listname)
+                            <div class=" bg-white h-14 drop-shadow-md rounded-lg flex items-center justify-between  px-4">
+                                <p>{{$listname->name}}</p>
+                                <span><i class="fa-solid fa-calendar-days"></i> {{$listname->date}} </span>
+                            </div>
+                            
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div id="graficas" class="hidden">
+                <div class="grid grid-cols-2 gap-10">
+                    <div>
+                        <h1 class="text-center mb-2">top items</h1>
+                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
+                            <p>Banana</p>
+                            <span>45%</span>
+                        </div>
+                            <div class="mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 45%"></div>
+                        </div>
+                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
+                            <p>Apple</p>
+                            <span>20%</span>
+                        </div>
+                            <div class=" mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 20%"></div>
+                        </div>
+                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
+                            <p>Chilli pepper</p>
+                            <span>18%</span>
+                        </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 18%"></div>
+                        </div>
+                        
+                        
+                    </div>
+                    <div> <h1 class="text-center mb-2">top Categories</h1>
+                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
+                            <p>Fruit and vegetables</p>
+                            <span>45%</span>
+                        </div>
+                            <div class="mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-sky-500 h-2.5 rounded-full" style="width: 45%"></div>
+                        </div>
+                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
+                            <p>Meat and Fish</p>
+                            <span>20%</span>
+                        </div>
+                            <div class=" mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-sky-500 h-2.5 rounded-full" style="width: 20%"></div>
+                        </div>
+                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
+                            <p>Beverages</p>
+                            <span>18%</span>
+                        </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-sky-500 h-2.5 rounded-full" style="width: 18%"></div>
+                        </div></div>
+                    <div class=" col-span-2">Montly summary</div>
+                </div>
+            </div>
+            
         </div>
         <aside id="default-sidebar" class="fixed top-0 right-0 z-20 w-96 h-screen bg-red-100 " aria-label="Sidebar">
             <div class="flex flex-col gap-2 h-full px-9 py-4 overflow-y-auto ">
@@ -329,9 +399,7 @@
                     });
                 });
             });
-
-
-
+            //javascript para modals
             document.getElementById('openModal').addEventListener('click', function() {
                 document.getElementById('myModal').classList.remove('hidden');
             });
@@ -343,15 +411,35 @@
                 document.getElementById('myModal').classList.add('hidden');
             });
 
-        
-
-        
-        //javascript para mandar el arreglo al form
-        document.querySelector('#formList').addEventListener('click', function() {
-        // Tu arreglo de JavaScript
-        document.getElementById('arregloInput').value = JSON.stringify(lista);
-        document.getElementById('nombreLista').value
-    });
+            //javascript para mandar el arreglo al form
+            document.querySelector('#formList').addEventListener('click', function() {
+                // Tu arreglo de JavaScript
+                document.getElementById('arregloInput').value = JSON.stringify(lista);
+                document.getElementById('nombreLista').value
+            });
+            //js para cambio de vistas
+            let botonVistaP =document.querySelector('#vistaPrincipal');
+            let botonVistaL =document.querySelector('#vistaListas');
+            let botonVistaG =document.querySelector('#vistaGraficas');
+            let vistaP =document.querySelector('#principal');
+            let vistaL =document.querySelector('#listas');
+            let vistaG =document.querySelector('#graficas');
+            
+            botonVistaP.addEventListener('click',function(){
+                vistaP.className=''
+                vistaL.className='hidden'
+                vistaG.className='hidden'
+            });
+            botonVistaL.addEventListener('click',function(){
+                vistaL.className=''
+                vistaP.className='hidden'
+                vistaG.className='hidden'
+            });
+            botonVistaG.addEventListener('click',function(){
+                vistaG.className=''
+                vistaL.className='hidden'
+                vistaP.className='hidden'
+            });
         </script>
     </body>
 </html>
