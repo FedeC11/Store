@@ -140,54 +140,18 @@
                 <div class="grid grid-cols-2 gap-10">
                     <div>
                         <h1 class="text-center mb-2">top items</h1>
-                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
-                            <p>Banana</p>
-                            <span>45%</span>
-                        </div>
-                            <div class="mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 45%"></div>
-                        </div>
-                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
-                            <p>Apple</p>
-                            <span>20%</span>
-                        </div>
-                            <div class=" mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 20%"></div>
-                        </div>
-                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
-                            <p>Chilli pepper</p>
-                            <span>18%</span>
-                        </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 18%"></div>
-                        </div>
+                        <div id="topsitem"></div>
+                        
+                    </div>
+                    <div> 
+                        <h1 class="text-center mb-2">top Categories</h1>
+                        <div id="topcategories"></div>
                         
                         
                     </div>
-                    <div> <h1 class="text-center mb-2">top Categories</h1>
-                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
-                            <p>Fruit and vegetables</p>
-                            <span>45%</span>
-                        </div>
-                            <div class="mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                            <div class="bg-sky-500 h-2.5 rounded-full" style="width: 45%"></div>
-                        </div>
-                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
-                            <p>Meat and Fish</p>
-                            <span>20%</span>
-                        </div>
-                            <div class=" mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                            <div class="bg-sky-500 h-2.5 rounded-full" style="width: 20%"></div>
-                        </div>
-                        <div class="mb-1 text-base font-medium text-black flex justify-between ">
-                            <p>Beverages</p>
-                            <span>18%</span>
-                        </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                            <div class="bg-sky-500 h-2.5 rounded-full" style="width: 18%"></div>
-                        </div></div>
                     <div class=" col-span-2">Montly summary</div>
                 </div>
+
             </div>
             
         </div>
@@ -440,6 +404,92 @@
                 vistaL.className='hidden'
                 vistaP.className='hidden'
             });
+
+            //js para graficas de top items
+            let topsitem =document.getElementById('topsitem')
+            let top2 =document.getElementById('top2')
+            let top3 =document.getElementById('top3')
+            const datositems = @json($itemlistnames);
+            const items=@json($items);
+            let posiciones =[];
+            
+            datositems.forEach(element =>{
+                const posicionExistente=posiciones.find(posicion=>posicion.item==element.item_id);
+                if(posicionExistente){
+                    posicionExistente.cantidad+=1;
+                }else{
+                    posiciones.push({
+                        item: element.item_id,
+                        cantidad:1
+                    });
+                }
+                
+            });
+            total=datositems.length
+            posiciones.sort((a, b) => b.cantidad - a.cantidad);
+            const cantidadAImprimir = Math.min(posiciones.length, 3);
+            
+            for(x=0;x<cantidadAImprimir;x++){
+                let nombre=items.find(posicion=>posicion.id==posiciones[x].item);
+                let porcentaje=posiciones[x].cantidad/total*100
+                porcentaje=Math.floor(porcentaje)
+                
+                let div= document.createElement('div');
+                div.innerHTML=`<div class="mb-1 text-base font-medium text-black flex justify-between ">
+                            <p id="top1">${nombre.name}</p>
+                            <span>${porcentaje}%</span>
+                        </div>
+                            <div class="mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: ${porcentaje}%"></div>
+                        </div>`
+                topsitem.appendChild(div)
+            }
+            //grafica de top por categoria
+            const cate=@json($categories);
+            const topcategories=document.getElementById('topcategories')
+            let topcategorias=[];
+            datositems.forEach(element =>{
+                let categoria =items.find(posicion=>posicion.id ==element.item_id)
+                topcategorias.push({
+                    categoria:categoria.category_id,
+                    item: element.item_id
+                })
+            })
+            topcategorias2=[];
+            topcategorias.forEach(element=>{
+                const existecategorie=topcategorias2.find(element1=>element1.categoria==element.categoria)
+                if(existecategorie){
+                    existecategorie.cantidad+=1;
+                }else{
+                    topcategorias2.push({
+                        categoria:element.categoria,
+                        cantidad:1
+                        })
+                    }
+                })
+            topcategorias2.sort((a, b) => b.cantidad - a.cantidad);
+            const cantidadAImprimir2 = Math.min(topcategorias2.length, 3);
+            
+            for(x=0;x<cantidadAImprimir2;x++){
+                let nombrecateegoria= cate.find(posicion=>posicion.id==topcategorias2[x].categoria)
+                console.log(nombrecateegoria)
+                //let nombre=items.find(posicion=>posicion.id==posiciones[x].item);
+                let porcentaje=topcategorias2[x].cantidad/total*100
+                porcentaje=Math.floor(porcentaje)
+                
+                let div= document.createElement('div');
+                div.innerHTML=`<div class="mb-1 text-base font-medium text-black flex justify-between ">
+                            <p>${nombrecateegoria.name}</p>
+                            <span>${porcentaje}%</span>
+                        </div>
+                            <div class="mb-4 w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-sky-500 h-2.5 rounded-full" style="width: ${porcentaje}%"></div>
+                        </div>`
+                topcategories.appendChild(div)
+            }
+            console.log(topcategorias2)
+
+            
         </script>
     </body>
 </html>

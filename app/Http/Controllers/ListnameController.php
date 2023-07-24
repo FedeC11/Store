@@ -45,8 +45,9 @@ class ListnameController extends Controller
             $itemListnames->listname_id=$listnameid;
             $itemListnames->pieces=$arreglito['cantidad'];
             $itemListnames->save();
-            return redirect()->route('items.index');
+            
         }
+        return redirect()->route('items.index');
         
         //return $listname;
         

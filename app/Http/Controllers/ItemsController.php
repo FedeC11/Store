@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\ItemListname;
 use App\Models\Listname;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,10 @@ class ItemsController extends Controller
     public function index()
     {   $listnames=Listname::all();
         $categories =Category::all();
-        $items=Item::all();
-        return view ('welcome', compact("categories","items","listnames"));
+        $items = Item::all();
+        $itemlistnames= ItemListname::all();
+
+        return view ('welcome', compact("categories","items","listnames","itemlistnames"));
     }
 
     /**
