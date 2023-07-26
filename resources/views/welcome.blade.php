@@ -14,6 +14,7 @@
         <script src="https://kit.fontawesome.com/a9775d2cf6.js" crossorigin="anonymous" defer></script>
         <!-- Styles -->
         @vite('resources/css/app.css')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.1/dist/chart.umd.min.js"></script>
     </head>
     <body class="font-quicksand">
         <aside id="default-sidebar" class="fixed top-0 left-0 z-20 w-24 h-screen " aria-label="Sidebar">
@@ -122,19 +123,27 @@
                 </div>
             </div>
             <div id="listas" class="hidden">
-                <h1>Shopping History</h1>
-                <div>
-                    <p class="mb-4">July</p>
-                    <div class="grid grid-cols-1 gap-4">
-                        @foreach ($listnames as $listname)
-                            <div class=" bg-white h-14 drop-shadow-md rounded-lg flex items-center justify-between  px-4">
-                                <p>{{$listname->name}}</p>
-                                <span><i class="fa-solid fa-calendar-days"></i> {{$listname->date}} </span>
-                            </div>
-                            
-                        @endforeach
+                <div id="listas">
+                    <h1>Shopping History</h1>
+                    <div>
+                        <p class="mb-4">Listas</p>
+                        <div id="buton3" class="grid grid-cols-1 gap-4">
+                            @foreach ($listnames as $listname)
+                                <div class=" bg-white h-14 drop-shadow-md rounded-lg flex items-center justify-between  px-4">
+                                    <p>{{$listname->name}}</p>
+                                    <div>
+                                        <span class="mr-12"><i class="fa-solid fa-calendar-days"></i> {{$listname->date}} </span>
+                                    <button><i class="fa-solid fa-chevron-right"></i></button>
+                                    </div>
+
+                                </div>
+
+                            @endforeach
+                        </div>
                     </div>
                 </div>
+                <div id="listasitems"></div>
+                
             </div>
             <div id="graficas" class="hidden">
                 <div class="grid grid-cols-2 gap-10">
@@ -149,7 +158,12 @@
                         
                         
                     </div>
-                    <div class=" col-span-2">Montly summary</div>
+                    <div class=" col-span-2">
+                        <h2>Montly summary</h2>
+                        <div> 
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -472,8 +486,6 @@
             
             for(x=0;x<cantidadAImprimir2;x++){
                 let nombrecateegoria= cate.find(posicion=>posicion.id==topcategorias2[x].categoria)
-                console.log(nombrecateegoria)
-                //let nombre=items.find(posicion=>posicion.id==posiciones[x].item);
                 let porcentaje=topcategorias2[x].cantidad/total*100
                 porcentaje=Math.floor(porcentaje)
                 
@@ -487,9 +499,82 @@
                         </div>`
                 topcategories.appendChild(div)
             }
-            console.log(topcategorias2)
+            //grafica 
+            const ctx = document.getElementById('myChart');
+            const listnames=@json($listnames);
+            const mescantidad=[]
+            listnames.forEach(listname=>{
+                const fecha = new Date(listname.date);
+                const mes = fecha.getMonth() + 1;
+                const existemes = mescantidad.find(mess =>mess.mes==mes);
+                console.log(existemes)
+                if(existemes){
+                    existemes.cantidad+=1
+                }else{
+                    mescantidad.push({
+                    mes:mes,
+                    cantidad:1
+                    })
+                }
+            })
+            arreglolabels=[]
+            datoslabels=[]
+            console.log(mescantidad)
+            mescantidad.forEach(element=>{
+                if(element.mes==1){
+                    element.mes='enero'
+                }else if(element.mes==2){
+                    element.mes='febrero'
+                }else if(element.mes==3){
+                    element.mes='Marzo'
+                }else if(element.mes==4){
+                    element.mes='Abril'
+                }else if(element.mes==5){
+                    element.mes='Mayo'
+                }else if(element.mes==6){
+                    element.mes='Junio'
+                }else if(element.mes==7){
+                    element.mes='Julio'
+                }else if(element.mes==8){
+                    element.mes='Agosto'
+                }else if(element.mes==9){
+                    element.mes='Septiembre'
+                }else if(element.mes==10){
+                    element.mes='Octubre'
+                }else if(element.mes==11){
+                    element.mes='Noviembre'
+                }else {
+                    element.mes='Diciembre'
+                } 
+
+                arreglolabels.push(element.mes)
+                datoslabels.push(element.cantidad)
+            })
+            const ordenMeses = {
+                enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6,
+                julio: 7, agosto: 8, septiembre: 9, octubre: 10, noviembre: 11, diciembre: 12
+            };
 
             
+            console.log(mescantidad)
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: arreglolabels,
+                    datasets: [{
+                    label: '# de listas',
+                    data: datoslabels,
+                    borderWidth: 1
+                }]
+                },
+                options: {
+                    scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+                }
+            });
         </script>
     </body>
 </html>
