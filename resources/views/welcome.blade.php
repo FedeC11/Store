@@ -123,17 +123,17 @@
                 </div>
             </div>
             <div id="listas" class="hidden">
-                <div id="listas">
-                    <h1>Shopping History</h1>
+                <div id="listas2">
+                    <h1 class="font-bold text-2xl text-gray-950 mb-3">Shopping History</h1>
                     <div>
-                        <p class="mb-4">Listas</p>
-                        <div id="buton3" class="grid grid-cols-1 gap-4">
+                        <p class="mb-4">Listas de compras</p>
+                        <div id="" class="grid grid-cols-1 gap-4">
                             @foreach ($listnames as $listname)
-                                <div class=" bg-white h-14 drop-shadow-md rounded-lg flex items-center justify-between  px-4">
-                                    <p>{{$listname->name}}</p>
+                                <div class="listbuton bg-white h-14 drop-shadow-md rounded-lg flex items-center justify-between  px-4">
+                                    <p class="font-medium">{{$listname->name}}</p>
                                     <div>
-                                        <span class="mr-12"><i class="fa-solid fa-calendar-days"></i> {{$listname->date}} </span>
-                                    <button><i class="fa-solid fa-chevron-right"></i></button>
+                                        <span class="mr-12 text-gray-600"><i class="fa-solid fa-calendar-days text-gray-600"></i> {{$listname->date}} </span>
+                                    <button class=""><i class="fa-solid fa-chevron-right"></i></button>
                                     </div>
 
                                 </div>
@@ -142,24 +142,27 @@
                         </div>
                     </div>
                 </div>
-                <div id="listasitems"></div>
+                <div id="listasitems" class="hidden ">
+                    <button id="back" class="text-amber-500"><i class="fa-solid fa-arrow-left text-amber-500"></i> back</button>
+                    <div id="divinterior"></div>
+                </div>
                 
             </div>
             <div id="graficas" class="hidden">
                 <div class="grid grid-cols-2 gap-10">
                     <div>
-                        <h1 class="text-center mb-2">top items</h1>
+                        <h1 class="text-center mb-2 font-bold text-2xl text-gray-950">top items</h1>
                         <div id="topsitem"></div>
                         
                     </div>
                     <div> 
-                        <h1 class="text-center mb-2">top Categories</h1>
+                        <h1 class="text-center mb-2 font-bold text-2xl text-gray-950">top Categories</h1>
                         <div id="topcategories"></div>
                         
                         
                     </div>
                     <div class=" col-span-2">
-                        <h2>Montly summary</h2>
+                        <h2 class="font-bold text-2xl text-gray-950 text-center">Montly summary</h2>
                         <div> 
                             <canvas id="myChart"></canvas>
                         </div>
@@ -239,7 +242,6 @@
                 boton[0].addEventListener("click", function() {
                     let valor = boton[0].dataset.valor;
                     let valorid=boton[0].id
-                    console.log(valorid)
                     // Agregar el valor al arreglo verificando si existe y sumando en cantidad si ya esta
                     const frutaExistente = lista.find(list => list.nombre == valor)
                     if (frutaExistente) {
@@ -290,7 +292,7 @@
                 boton[0].addEventListener("click", function() {
                     let valor = boton[0].dataset.valor;
                     let valorid=boton[0].id
-                    console.log(valorid)
+                    
                     // Agregar el valor al arreglo verificando si existe y sumando en cantidad si ya esta
                     const frutaExistente = lista.find(list => list.nombre == valor)
                     if (frutaExistente) {
@@ -336,7 +338,7 @@
                 boton[0].addEventListener("click", function() {
                     let valor = boton[0].dataset.valor;
                     let valorid=boton[0].id
-                    console.log(valorid)
+                    
                     // Agregar el valor al arreglo verificando si existe y sumando en cantidad si ya esta
                     const frutaExistente = lista.find(list => list.nombre == valor)
                     if (frutaExistente) {
@@ -507,7 +509,7 @@
                 const fecha = new Date(listname.date);
                 const mes = fecha.getMonth() + 1;
                 const existemes = mescantidad.find(mess =>mess.mes==mes);
-                console.log(existemes)
+                
                 if(existemes){
                     existemes.cantidad+=1
                 }else{
@@ -519,7 +521,6 @@
             })
             arreglolabels=[]
             datoslabels=[]
-            console.log(mescantidad)
             mescantidad.forEach(element=>{
                 if(element.mes==1){
                     element.mes='enero'
@@ -556,7 +557,7 @@
             };
 
             
-            console.log(mescantidad)
+            
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -575,6 +576,52 @@
                 }
                 }
             });
+        //listas con sus items
+        //datos2 datositems listnames
+        const botonListaItems =document.querySelectorAll('.listbuton')
+        const listasVista =document.getElementById('listas2')
+        const listasitems =document.getElementById('listasitems')
+        const buttonBack =document.getElementById('back')
+        const divItems=document.getElementById('divinterior')
+        console.log(listnames)
+        botonListaItems.forEach(element=>{
+            let nombre =element.children[0].innerHTML
+            let nombrelista= listnames.find(element=>element.name==nombre)
+            let arreglolista=datositems.filter(element=>element.listname_id==nombrelista.id)
+            console.log(nombrelista)
+            element.children[1].children[1].addEventListener('click', function(){
+                divItems.innerHTML=''
+                listasVista.className='hidden'
+                listasitems.className=''
+                div=document.createElement('div')
+                div1=document.createElement('div')
+                h3= document.createElement('h3')
+                h3.innerHTML=nombrelista.name
+                h3.className='my-4'
+                div1.className='grid grid-cols-4 gap-10'
+                div.appendChild(h3)
+                arreglolista.forEach(element=>{
+                    let itemnombre= datos2.find(ele=>ele.id==element.item_id)
+                    console.log(itemnombre.name)
+                    div2=document.createElement('div')
+                    div2.className = "bg-white items-center drop-shadow-md rounded-lg py-2 px-4 flex flex-row justify-between";
+                    div2.innerHTML=`<span>${itemnombre.name}</span><span>${element.pieces} pcs</span>`
+                    div1.appendChild(div2)
+                })
+                div.appendChild(div1)
+                divItems.appendChild(div)
+                
+                
+            })
+            
+            console.log(arreglolista)
+        })
+        buttonBack.addEventListener("click",function() {
+            listasVista.className=''
+            listasitems.className='hidden'
+            })
+        
+
         </script>
     </body>
 </html>
