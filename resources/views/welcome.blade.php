@@ -17,6 +17,53 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.1/dist/chart.umd.min.js"></script>
     </head>
     <body class="font-quicksand">
+        <!-- Modal -->
+        <div id="myModal" class="fixed inset-0 flex items-center justify-end z-50 hidden">
+            <div class="bg-white w-96 h-screen overflow-y-auto p-6">
+                <h2 class="text-xl font-bold mb-4">Add a new item</h2>
+                <form action="{{ route('items.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-6">
+                        <label for="default-input" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+                        <input name="name" type="text" id="default-input"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
+                    </div>
+                    <div class="mb-6">
+                        <label for="default-input"
+                        class="block mb-2 text-sm font-medium text-gray-900">Note(opcional)</label>
+                        <input type="text" id="default-inpu" name="note"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
+                    </div>
+                    <div class="mb-6">
+                        <label for="default-input"
+                        class="block mb-2 text-sm font-medium text-gray-900">image(opcional)</label>
+                        <input type="text" id="default-image" name="image"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
+                    </div>
+                    <div class="mb-6">
+                        <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Selecciona una
+                        categoria</label>
+                        <select id="categories" name="category"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <button type="button" id="closeModal1"
+                        class="mt-4 bg-sky-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                        Save
+                    </button>
+                    
+                </form>
+                <button id="closeModal"
+                        class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                        Cancel
+                    </button>
+                
+            </div>
+        </div>
         <aside id="default-sidebar" class="fixed top-0 left-0 z-20 w-24 h-screen " aria-label="Sidebar">
             <div class="flex flex-col justify-between h-full px-3 py-4 overflow-y-auto bg-white">
                 <div class="w-12 h-12  ">
@@ -77,50 +124,7 @@
                         </div>
                     </div>
                 @endforeach
-                <!-- Modal -->
-                <div id="myModal" class="fixed inset-0 flex items-center justify-end z-50 hidden">
-                    <div class="bg-white w-96 h-screen overflow-y-auto p-6">
-                        <h2 class="text-xl font-bold mb-4">Add a new item</h2>
-                        <form action="{{ route('items.store') }}" method="POST">
-                            @csrf
-                            <div class="mb-6">
-                                <label for="default-input" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                                <input name="name" type="text" id="default-input"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
-                            </div>
-                            <div class="mb-6">
-                                <label for="default-input"
-                                class="block mb-2 text-sm font-medium text-gray-900">Note(opcional)</label>
-                                <input type="text" id="default-inpu" name="note"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
-                            </div>
-                            <div class="mb-6">
-                                <label for="default-input"
-                                class="block mb-2 text-sm font-medium text-gray-900">image(opcional)</label>
-                                <input type="text" id="default-image" name="image"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
-                            </div>
-                            <div class="mb-6">
-                                <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Selecciona una
-                                categoria</label>
-                                <select id="categories" name="category"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <button id="closeModal"
-                                class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                                Cancel
-                            </button>
-                            <button type="submit" id="closeModal1"
-                                class="mt-4 bg-sky-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                                Save
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                
             </div>
             <div id="listas" class="hidden">
                 <div id="listas2">
