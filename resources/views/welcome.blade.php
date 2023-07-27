@@ -64,6 +64,29 @@
                 
             </div>
         </div>
+        <!-- Modal 2 -->
+        <div id="myModal2" class="fixed inset-0 flex items-center justify-end z-50 hidden">
+            <div  class="bg-white w-96 h-screen overflow-y-auto p-6">
+                <div id="cadaItem">
+                    <div class="h-52 w-72 mx-auto rounded-lg mb-4">
+                        <img class="object-fill  w-full rounded-lg h-full" src="https://picsum.photos/seed/picsum/200/300" alt="imagen">
+                    </div>
+                    <p>name</p>
+                    <h2 class="text-xl font-bold mb-4"> item</h2>
+                    <p>category</p>
+                    <h2 class="text-xl mb-4">category</h2>
+                    <p>note</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi alias sit modi. Labore ad, similique laborum architecto ex et, debitis id eos assumenda libero maxime velit atque iusto itaque magnam.</p>
+                </div>
+                
+                <button id="closeModal2"
+                        class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                        Cancel
+                    </button>
+                
+            </div>
+            
+        </div>
         <aside id="default-sidebar" class="fixed top-0 left-0 z-20 w-24 h-screen " aria-label="Sidebar">
             <div class="flex flex-col justify-between h-full px-3 py-4 overflow-y-auto bg-white">
                 <div class="w-12 h-12  ">
@@ -96,6 +119,7 @@
         </aside>
         <div class="p-20 ml-24 bg-slate-50 mr-96  pt-9">
             <div id="principal" class="">
+                <button id='openModal2' >hola</button>
                 <div class="flex flex-row justify-between mb-10">
                     <h1 class="text-2xl"><span class=" text-amber-500 font-bold">Shoppingify</span> allows you take your
                     shopping list wherever you go</h1>
@@ -394,6 +418,11 @@
             document.getElementById('closeModal1').addEventListener('click', function() {
                 document.getElementById('myModal').classList.add('hidden');
             });
+            
+
+            document.getElementById('closeModal2').addEventListener('click', function() {
+                document.getElementById('myModal2').classList.add('hidden');
+            });
 
             //javascript para mandar el arreglo al form
             document.querySelector('#formList').addEventListener('click', function() {
@@ -587,12 +616,12 @@
         const listasitems =document.getElementById('listasitems')
         const buttonBack =document.getElementById('back')
         const divItems=document.getElementById('divinterior')
-        console.log(listnames)
+        
         botonListaItems.forEach(element=>{
             let nombre =element.children[0].innerHTML
             let nombrelista= listnames.find(element=>element.name==nombre)
             let arreglolista=datositems.filter(element=>element.listname_id==nombrelista.id)
-            console.log(nombrelista)
+            
             element.children[1].children[1].addEventListener('click', function(){
                 divItems.innerHTML=''
                 listasVista.className='hidden'
@@ -606,7 +635,7 @@
                 div.appendChild(h3)
                 arreglolista.forEach(element=>{
                     let itemnombre= datos2.find(ele=>ele.id==element.item_id)
-                    console.log(itemnombre.name)
+                    
                     div2=document.createElement('div')
                     div2.className = "bg-white items-center drop-shadow-md rounded-lg py-2 px-4 flex flex-row justify-between";
                     div2.innerHTML=`<span>${itemnombre.name}</span><span>${element.pieces} pcs</span>`
@@ -618,13 +647,33 @@
                 
             })
             
-            console.log(arreglolista)
+            
         })
         buttonBack.addEventListener("click",function() {
             listasVista.className=''
             listasitems.className='hidden'
             })
+        // se crea funcion del modal por cada item
+        let cadaitem = document.getElementById('cadaItem')
+        let ItemsT=[]
+        arregloContenedor.forEach(element=>{
+            ItemsT.push(element)
+            
+        })
+        arregloContenedor1.forEach(element=>{
+            ItemsT.push(element)
+        })
+        arregloContenedor2.forEach(element=>{
+            ItemsT.push(element)
+        })
+        console.log(ItemsT)
         
+        ItemsT.forEach(element=>{
+            console.log(element)
+            element.addEventListener('click',function() {
+                document.getElementById('myModal2').classList.remove('hidden');
+            })
+        })
 
         </script>
     </body>
